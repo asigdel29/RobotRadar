@@ -1,73 +1,54 @@
-import sys
-import time
 from gopigo import *
-from easygopigo3 import EasyGoPiGo3
+import time
+import easygopigo3 as easy
 
+mysensor= EasyDistanceSensor()
+servo_pos = 90
+print("CONTROLS")
+print("w: move robot forward")
+print("a: move robot left")
+print("d: move robot right")
+print("s: move robot back")
+print("4: move robot forward")
+print("6: move servo right")
+print("0: move servo home")
+print("Press ENTER to send the commands")
 
-print("Welcome")    
-print("Please declare your minimum safe distance")
-safedistance = input()
-##print("Please declare initial speed")
-##current_speed = input()
-
-servo_pos=90
-gpg = EasyGoPiGo3()
-distance_sensor = gpg.init_distance_sensor()
+gpg = easy.EasyGoPiGo3()
+my_distance_sensor = gpg.init_distance_sensor()
 
 while True:
-    print("W = forward.")
-    print("A= left.")
-    print("S = backward.")
-    print("D = right.")
-    print("1 = Servo left")
-    print("2 = Servo right")
-    print("3 = Servo home")
-    print("4 = Increase speed (Default speed = 100)")
-    print("5= Decrease speed")
-    print("z= Exit")
-
-    command = input()
-    if command == '4':  #Increase speed
+    print("Distance Sensor Reading: {} mm ".format(my_distance_sensor.read_mm()))
+    a = input()
+    if a == 'w':
+        fwd()
+    elif a == 'a':
+        left()
+    elif a == 'd':
+        right()
+    elif a == 's':
+        bwd()
+    elif a == 'x':
+        stop()
+    elif a == 't':
         increase_speed()
-
-
-    elif command == '5': #Decrease speed
+    elif a == 'g':
         decrease_speed()
+    elif a == '4':
+        servo_pos = servo_pos + 10
+    elif a == '6':
+        servo_pos = servo_pos - 50
+    elif a == '0':
+        servo_pos = 90
 
-    elif command=='1':     #Servo left
-        servo_pos=servo_pos+10
-    elif command == '2':  #Servo right
-        servo_pos = servo_pos - 10
-    elif command=='3':    #Servo home(Default position)
-        servo_pos=90
+    if my_distance_sensor.read_mm()>200:
+    stop()
 
-    if servo_pos > 180:
+    if servo_pos > 90:
         servo_pos = 180
     if servo_pos < 0:
-        servo_pos = 0
+        servo_pos = 180
 
-        servo(servo_pos)
-        time.sleep(.1)
-
-    elif command=='w': #Move forward
-        fwd()
-    elif command=='a': #Turn left
-        left()
-    elif command=='d': #Turn Right
-        right()
-    elif command=='s': #Move back
-        bwd()
-    elif command == 'x': #Stop
-        stop()
-    elif command == 'z': #Exit
-        print("Exiting")
-        sys.exit()
-
-    if distance_sensor.read_mm() == 200:
-        print("Obstacle detectd in path: " + str(distance_sensor.read_mm()))
-        stop()
-
-    else:
-        print("Enter valid command")
-
+    servo(servo_pos)
     time.sleep(.1)
+
