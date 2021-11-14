@@ -6,8 +6,6 @@ from gopigo import *
 import sys
 from collections import Counter
 
-""" This module draws the radar screen """
-
 def draw(radarDisplay, targets, angle, distance, fontRenderer):
      # draw initial screen
     radarDisplay.fill(colors.black)
