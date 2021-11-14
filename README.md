@@ -3,6 +3,6 @@ The objective of this project is to design and implement an obstacle “radar”
 
  Deployment Guide - Robot Radar
 1. Clone Repo into GoPiGo
-2. Import pygame, gopigo libarie
+2. Import pygame, gopigo library
 2. Run GoPiGo
 3. Run main.py
