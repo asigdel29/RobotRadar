@@ -69,15 +69,6 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
     text = fontRenderer.render("Angle : " + str(angle), 1, colors.white)
     radarDisplay.blit(text,(40,40))
 
-    # write the distanceance
-    dist=us_dist(15)
-    if dist == -1:
-        text = fontRenderer.render("distance : Out Of Range" , 1, colors.white)
-    else:
-        text = fontRenderer.render("distance : " +str(dist) + " cm" , 1, colors.white)
-
-    radarDisplay.blit(text,(40,80))
-
     # draw targets
     for angle in targets.keys():
         # calculate the coordinates and the remoteness of the target
@@ -90,25 +81,6 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
         # draw the line indicating the target
         pygame.draw.line(radarDisplay, targets[angle].color, (700 - int(f), 780 - int(e)), (700 - int(d), 780 - int(c)), 3)
         
-        # fading
-        diffTime = time.time() - targets[angle].time
-        
-        if diffTime >= 0.0 and diffTime <= 0.5:
-            targets[angle].color = colors.red1L
-        elif diffTime > 0.5 and diffTime <= 1:
-            targets[angle].color = colors.red2L
-        elif diffTime > 1.0 and diffTime <= 1.5:
-            targets[angle].color = colors.red3L
-        elif diffTime > 1.5 and diffTime <= 2.0:
-            targets[angle].color = colors.red4L
-        elif diffTime > 2.0 and diffTime <= 2.5:
-            targets[angle].color = colors.red5L
-        elif diffTime > 2.5 and diffTime <= 3.0:
-            targets[angle].color = colors.red6L
-        elif diffTime > 3.0:
-            del targets[angle]
-            
-
 
 
     # update the screen
