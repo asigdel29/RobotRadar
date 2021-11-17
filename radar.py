@@ -34,10 +34,10 @@ def us_map():
     x=[0]*(num_of_readings+1)   #list to hold the x coordinate of each point
     y=[0]*(num_of_readings+1)   #list to hold the y coordinate of each point
     buf=[0]*40
-    ang=0
+    ang=170
     lim=250     #maximum limit of distance measurement (any value over this which be initialized to the limit value)
     index=0
-    sample=2
+    sample=1
     targets = {}
     enable_servo()
     servo_pos=180
@@ -62,13 +62,9 @@ def us_map():
         if debug==1:
             print index,ang,rm
             
-        #ang_l[index]=ang
-        #dist_l[index]=rm
-        #index+=1
-            
         servo(ang)  
         time.sleep(delay)
-        ang+=incr
+        ang-=incr
         
         
         if dist != -1 and dist <= 50:
@@ -76,13 +72,24 @@ def us_map():
     
         draw(radarDisplay, targets, ang, dist, fontRenderer)
 
-        #ang = 180 - ang
-        #dc = 1.0 / 18.0 * ang + 2
-        #servo.ChangeDutyCycle(dc)
         time.sleep(0.001)
-        
-        if ang>180:
-            break
+        grid_size=51
+        if ang<10:
+            time.sleep(.5)
+            for i in range(num_of_readings+1):  
+                x[i]=(int(dist_l[i]*math.cos(math.pi*(ang_l[i])/180))/10)
+                y[i]=int(dist_l[i]*math.sin(math.pi*ang_l[i]/180))/10
+    
+            for i in range(num_of_readings+1):  
+                x[i]=(grid_size/2)-x[i]
+                y[i]=(grid_size/2)-y[i]
+                
+            grid = [[0 for a in xrange(grid_size)] for a in xrange(grid_size)] 
+            for i in range (num_of_readings+1):
+                if dist_l[i]<>lim:
+                    grid[y[i]][x[i]]=1  
+            fence='-'*(grid_size+1)
+            ang =170
 
 while True:
     enable_com_timeout(2000)
