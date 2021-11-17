@@ -1,4 +1,3 @@
-import RPi.GPIO as GPIO
 import pygame
 import math
 import time
