@@ -75,14 +75,15 @@ def us_map():
         grid_size=51
         if ang<10:
             time.sleep(.5)
+            #Convert the distance and angle to (x,y) coordinates and scale it down
             for i in range(num_of_readings+1):  
                 x[i]=(int(dist_l[i]*math.cos(math.pi*(ang_l[i])/180))/10)
                 y[i]=int(dist_l[i]*math.sin(math.pi*ang_l[i]/180))/10
-    
+            #Rotate the readings so that it is printed in the correct manner
             for i in range(num_of_readings+1):  
                 x[i]=(grid_size/2)-x[i]
                 y[i]=(grid_size/2)-y[i]
-                
+            #Create a grid
             grid = [[0 for a in xrange(grid_size)] for a in xrange(grid_size)] 
             for i in range (num_of_readings+1):
                 if dist_l[i]<>lim:
