@@ -44,7 +44,7 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
     pygame.draw.line(radarDisplay, colors.green, (700, 780), (1195, 285), 1)
 
     # draw stastics board
-    pygame.draw.rect(radarDisplay, colors.blue, [30, 30, 200, 200], 2)
+    pygame.draw.rect(radarDisplay, colors.blue, [30, 30, 300, 200], 2)
 
     # write the 0 degree
     text = fontRenderer.render("0", 1, colors.green)
@@ -105,7 +105,7 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
         # change the scale if the range is changed
         e = math.sin(math.radians(targets[angle].angle)) * (700 / 50) * targets[angle].distance
         f = math.cos(math.radians(targets[angle].angle)) * (700 / 50) * targets[angle].distance
-
+        
 
         if targets[angle].distance < 15:
             color = colors.red
@@ -116,8 +116,9 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
         
 
         # draw the line indicating the target
-        pygame.draw.circle(radarDisplay, color, (700 - int(f), 780 - int(e)), 8)
+        pygame.draw.circle(radarDisplay, color, (700 - int(f), 780 - int(e)), 20)
         
+        #pygame.draw.line(radarDisplay, targets[angle].color, (700 - int(f), 780 - int(e)), (700 - int(d), 780 - int(c)), 3)
 
     
 
