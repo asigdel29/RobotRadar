@@ -7,6 +7,10 @@ black = (0, 0, 0)
 # red color
 red = (255, 0, 0)
 
+orange = (255, 165, 0)
+
+green = (0, 255, 0)
+
 # different transparent red degrees
 red1L = (255, 26, 26)
 red2L = (255, 51, 51)
@@ -17,6 +21,8 @@ red6L = (255, 153, 153)
 
 # green
 green = (0, 255, 0)
+
+yellow = (255, 255, 0)
 
 # blue
 blue = (0, 0, 255)
