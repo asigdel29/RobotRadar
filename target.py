@@ -16,3 +16,4 @@ class Target:
         self.time = time.time()
         self.color = colors.red
         
+
