@@ -75,21 +75,21 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
     text = fontRenderer.render("Angle : " + str(abs(angle-180)), 1, colors.white)
     radarDisplay.blit(text,(40,40))
     
-    text = fontRenderer.render("Forward : " + str('up'), 1, colors.white)
+    text = fontRenderer.render("Forward : " + str('Up Arrow'), 1, colors.white)
     radarDisplay.blit(text, (40,60))
     
 
-    text = fontRenderer.render("Backward : " + str('down'), 1, colors.white)    
+    text = fontRenderer.render("Backward : " + str('Down Arrow'), 1, colors.white)    
     radarDisplay.blit(text, (40,80))
     
     
-    text = fontRenderer.render("Left : " + str('left'), 1, colors.white)
+    text = fontRenderer.render("Left : " + str('Left Arrow'), 1, colors.white)
     radarDisplay.blit(text, (40,100))
     
-    text = fontRenderer.render("Right : " + str('right'), 1, colors.white)     
+    text = fontRenderer.render("Right : " + str('Right Arrow'), 1, colors.white)     
     radarDisplay.blit(text, (40,120))
     
-    text = fontRenderer.render("Stop : " + str('0'), 1, colors.white)
+    text = fontRenderer.render("Radar Sweep : " + str('0'), 1, colors.white)
     radarDisplay.blit(text, (40,140))
     
     
@@ -106,36 +106,21 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
         e = math.sin(math.radians(targets[angle].angle)) * (700 / 50) * targets[angle].distance
         f = math.cos(math.radians(targets[angle].angle)) * (700 / 50) * targets[angle].distance
 
+
+        if targets[angle].distance < 30:
+            color = colors.red
+        elif 45 >= targets[angle].distance >= 30:
+            color = colors.orange
+        elif targets[angle].distance > 45:
+            color = colors.green
+        
+
         # draw the line indicating the target
-        pygame.draw.circle(radarDisplay, targets[angle].color, (700 - int(f), 780 - int(e)), 8)
-     
-    for ev in pygame.event.get():      
-        if ev.type == pygame.KEYDOWN:
-            if ev.key == pygame.K_RIGHT:
-                right()
-                '''servo(90)
-                enc(0,1,18)
-                update_right()
-                update_radar()
-                if KEYDOWN == right
-                    right()
-                elif
-                    stop()'''
-            if ev.key == pygame.K_LEFT:
-                left()
-            if ev.key == pygame.K_UP:
-                fwd()
-            if ev.key == pygame.K_DOWN:
-                bwd()
-            if ev.key == pygame.K_1:
-                exit()
-            if ev.key == pygame.K_0:
-                stop()
-    time.sleep(.2)
+        pygame.draw.circle(radarDisplay, color, (700 - int(f), 780 - int(e)), 8)
+        
+
     
 
 
     # update the screen
     pygame.display.update()
-
-    
