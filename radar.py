@@ -1,10 +1,12 @@
 import pygame
+import picamera
+import io
 import math
 import time
 import colors
 import sys
 from target import *
-from display import *
+from display import*
 from gopigo import *
 from collections import Counter
 
@@ -33,10 +35,10 @@ def us_map():
     x=[0]*(num_of_readings+1)   #list to hold the x coordinate of each point
     y=[0]*(num_of_readings+1)   #list to hold the y coordinate of each point
     buf=[0]*40
-    ang=25
+    ang=15
     lim=1000     #maximum limit of distance measurement (any value over this which be initialized to the limit value)
     index=0
-    sample=1
+    sample=2
     targets = {}
     enable_servo()
     servo_pos=160
@@ -52,6 +54,11 @@ def us_map():
                 buf[i]=dist
             else:
                 buf[i]=lim
+                
+        if dist < 2:
+            stop()
+            running = 0
+            
             
         max=Counter(buf).most_common()  
         rm=-1
@@ -76,11 +83,12 @@ def us_map():
             
             draw(radarDisplay, targets, ang, dist, fontRenderer)
         
-            if ang>170:
+            if ang>165:
                 ang =25
                 servo(90)
                 running = 0
-                
+
+            
         for ev in pygame.event.get():      
                 if ev.type == pygame.KEYDOWN:
                     if ev.key == pygame.K_RIGHT:
@@ -90,12 +98,15 @@ def us_map():
                             if targets[angle].angle >= 330:
                                 targets[angle].angle = targets[angle].angle - 330
                                 print targets[angle].angle
-                            elif targets[angle].angle < 0:
-                                targets[angle].angle = targets[angle].angle + 330
-                                print targets[angle].angle   
+                            elif targets[angle].angle < 330:
+                                targets[angle].angle = targets[angle].angle + 30
+                                print targets[angle].angle
+                        
                     if ev.key == pygame.K_LEFT:
                         left()
                         time.sleep(turnTime)
+                        
+                                
                         for angle in targets.keys():
                             if targets[angle].angle >= 30:
                                 targets[angle].angle = targets[angle].angle - 30
@@ -103,7 +114,6 @@ def us_map():
                             elif targets[angle].angle < 30:
                                 targets[angle].angle = targets[angle].angle + 330
                                 print targets[angle].angle
-                                
                     if ev.key == pygame.K_UP:
                         fwd()
                         time.sleep(driveTime)
@@ -123,8 +133,8 @@ def us_map():
                         running = 1
                         
                     if ev.key == pygame.K_2:
-                        for targets in targets.keys():
-                            del targets
+                        for angle in targets.keys():
+                            targets[angle].distance = None                            
                         
                 if ev.type == pygame.KEYUP:
                     if ev.key == pygame.K_LEFT or ev.key == pygame.K_RIGHT or ev.key == pygame.K_UP or ev.key == pygame.K_DOWN:
