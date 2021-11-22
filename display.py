@@ -1,11 +1,39 @@
 import colors
+import colorsys
 import pygame
+import picamera
 import math
 import time
 from gopigo import *
 import sys
 from collections import Counter
-distance_to_stop=20
+distance_to_stop = 20
+import io
+from radar import *
+
+'''
+camera = picamera.PiCamera()
+
+camera.resolution = (320, 180)
+    
+camera.crop = (0.0, 0.0, 1.0, 1.0)
+
+screen = pygame.display.set_mode((0,0))
+
+'''
+def hsv2rgb(h, s, v):
+        if s == 0.0: return (v, v, v)
+        i = int(h*6.) # XXX assume int() truncates!
+        f = (h*6.)-i; p,q,t = v*(1.-s), v*(1.-s*f), v*(1.-s*(1.-f)); i%=6
+        if i == 0: return (v, t, p)
+        if i == 1: return (q, v, p)
+        if i == 2: return (p, v, t)
+        if i == 3: return (p, q, v)
+        if i == 4: return (t, p, v)
+        if i == 5: return (v, p, q)
+        
+def hsv3rgb(h,s,v):
+    return tuple(round(i * 255) for i in colorsys.hsv_to_rgb(h,s,v))
 
 def draw(radarDisplay, targets, angle, distance, fontRenderer):
      # draw initial screen
@@ -24,13 +52,15 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
     pygame.draw.circle(radarDisplay, colors.green, (630,700), 100, 3)
 
     radarDisplay.fill(colors.black, [0, 785, 1400, 20])
+    
+    
 
 
     # 45 degree line
     pygame.draw.line(radarDisplay, colors.green, (630, 750),(205, 285), 3)
 
     # 90 degree line
-    pygame.draw.line(radarDisplay, colors.green, (630, 750), (650, 115), 3)
+    pygame.draw.line(radarDisplay, colors.green, (630, 750), (630, 115), 3)
 
     # 135 degree line
     pygame.draw.line(radarDisplay, colors.green, (630, 750), (1090, 285), 3)
@@ -57,15 +87,17 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
     # write the 180 degree
     text = fontRenderer.render("180", 1, colors.green)
     radarDisplay.blit(text,(1230,680))
+    
+ 
 
     # draw the moving line
     a = math.sin(math.radians(angle)) * 700.0
     b = math.cos(math.radians(angle)) * 700.0
-    pygame.draw.line(radarDisplay, colors.green, (700, 780), (700 - int(b), 780 - int(a)), 3)
+    pygame.draw.line(radarDisplay, colors.green, (630, 700), (700 - int(b), 630 - int(a)), 3)
 
     # write the current angle
     #text = fontRenderer.render("Angle : " + str(angle), 1, colors.white)
-    if angle > 170:
+    if angle > 166:
         text = fontRenderer.render("Angle : 90 " , 1, colors.white)
     else:
         text = fontRenderer.render("Angle : " + str(angle), 1, colors.white)
@@ -92,7 +124,6 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
     text = fontRenderer.render("Exit : " + str('1'), 1, colors.white)
     radarDisplay.blit(text, (40,160))
 
-
     # draw targets
     for angle in targets.keys():
         # calculate the coordinates and the remoteness of the target
@@ -103,20 +134,27 @@ def draw(radarDisplay, targets, angle, distance, fontRenderer):
         f = math.cos(math.radians(targets[angle].angle)) * (700 / 50) * targets[angle].distance
         
 
-        if targets[angle].distance < 15:
-            color = colors.red
-        elif 35 >= targets[angle].distance >= 15:
-            color = colors.orange
-        elif targets[angle].distance > 35:
+#        if targets[angle].distance < 15:
+#            color = colors.red
+#        elif 35 >= targets[angle].distance >= 15:
+#            color = colors.orange
+#        elif targets[angle].distance > 35:
+#            color = colors.green
+        if 0 < targets[angle].distance < 30 :
+            color = hsv3rgb((((abs(targets[angle].distance) ** 1.1) / 360)), 1, 1)
+        if targets[angle].distance <= 0 or targets[angle].distance >= 30:
             color = colors.green
-        
 
         # draw the line indicating the target
-        pygame.draw.circle(radarDisplay, color, (700 - int(f), 780 - int(e)), 20)
+        pygame.draw.circle(radarDisplay, color, (700 - int(f), 780 - int(e)), 10)
+        print color
         
         #pygame.draw.line(radarDisplay, targets[angle].color, (700 - int(f), 780 - int(e)), (700 - int(d), 780 - int(c)), 3)
 
-    
+        # Scaled Display
+        #camera
+        
+        
 
 
     # update the screen
