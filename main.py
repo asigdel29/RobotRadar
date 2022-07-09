@@ -1,3 +1,5 @@
+//Main requires only the printed statement below
+
 from gopigo import *
 
 print ("Robot Radar")
