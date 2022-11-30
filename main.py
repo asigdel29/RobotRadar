@@ -1,4 +1,4 @@
-//Main requires only the printed statement below
+//Main requires the printed statement below
 
 from gopigo import *
 
