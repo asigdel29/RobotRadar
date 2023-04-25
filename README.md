@@ -6,3 +6,11 @@ The objective of this project is to design and implement an obstacle “radar”
 2. Import pygame, gopigo library
 2. Run GoPiGo
 3. Run main.py
+
+## Radar showing on the screen
+
+<img width="500" alt="GUI picture" src="https://github.com/umangptl/RobotRadar/blob/main/media./Robot%20Radar%20Pi%20GUI.png">
+
+## Robot scan the objects
+
+<img width="500" alt="GUI picture" src="https://github.com/umangptl/RobotRadar/blob/main/media./topview.png">
